@@ -1214,11 +1214,12 @@ async function start() {
   });
 }
 
-// Export Lambda handler for AWS Cloud Serverless deployment
+// Export Lambda handler & default Express app for Vercel / AWS Cloud Serverless deployment
 export const handler = serverless(app);
+export default app;
 
-// Start Express Server locally if not running in AWS Lambda
-if (!process.env.AWS_LAMBDA_FUNCTION_NAME) {
+// Start Express Server locally if not running in AWS Lambda / Vercel Serverless
+if (!process.env.AWS_LAMBDA_FUNCTION_NAME && !process.env.VERCEL) {
   start().catch((err: any) => {
     console.error("[BACKEND] Critical failure starting server:", err);
     process.exit(1);
