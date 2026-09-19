@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("source-map-support/register");
+const cdk = require("aws-cdk-lib");
+const lifeguard_stack_1 = require("../lib/lifeguard-stack");
+const app = new cdk.App();
+new lifeguard_stack_1.LifeGuardStack(app, "LifeGuardStack", {
+    env: {
+        account: process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID || "123456789012",
+        region: process.env.CDK_DEFAULT_REGION || process.env.AWS_REGION || "us-east-1",
+    },
+    description: "LifeGuard Proactive Risk Sentinel - AWS Cloud Serverless Infrastructure",
+});
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5mcmEuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmZyYS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFDQSx1Q0FBcUM7QUFDckMsbUNBQW1DO0FBQ25DLDREQUF3RDtBQUV4RCxNQUFNLEdBQUcsR0FBRyxJQUFJLEdBQUcsQ0FBQyxHQUFHLEVBQUUsQ0FBQztBQUMxQixJQUFJLGdDQUFjLENBQUMsR0FBRyxFQUFFLGdCQUFnQixFQUFFO0lBQ3hDLEdBQUcsRUFBRTtRQUNILE9BQU8sRUFBRSxPQUFPLENBQUMsR0FBRyxDQUFDLG1CQUFtQixJQUFJLE9BQU8sQ0FBQyxHQUFHLENBQUMsY0FBYyxJQUFJLGNBQWM7UUFDeEYsTUFBTSxFQUFFLE9BQU8sQ0FBQyxHQUFHLENBQUMsa0JBQWtCLElBQUksT0FBTyxDQUFDLEdBQUcsQ0FBQyxVQUFVLElBQUksV0FBVztLQUNoRjtJQUNELFdBQVcsRUFBRSx5RUFBeUU7Q0FDdkYsQ0FBQyxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiIyEvdXNyL2Jpbi9lbnYgbm9kZVxuaW1wb3J0IFwic291cmNlLW1hcC1zdXBwb3J0L3JlZ2lzdGVyXCI7XG5pbXBvcnQgKiBhcyBjZGsgZnJvbSBcImF3cy1jZGstbGliXCI7XG5pbXBvcnQgeyBMaWZlR3VhcmRTdGFjayB9IGZyb20gXCIuLi9saWIvbGlmZWd1YXJkLXN0YWNrXCI7XG5cbmNvbnN0IGFwcCA9IG5ldyBjZGsuQXBwKCk7XG5uZXcgTGlmZUd1YXJkU3RhY2soYXBwLCBcIkxpZmVHdWFyZFN0YWNrXCIsIHtcbiAgZW52OiB7XG4gICAgYWNjb3VudDogcHJvY2Vzcy5lbnYuQ0RLX0RFRkFVTFRfQUNDT1VOVCB8fCBwcm9jZXNzLmVudi5BV1NfQUNDT1VOVF9JRCB8fCBcIjEyMzQ1Njc4OTAxMlwiLFxuICAgIHJlZ2lvbjogcHJvY2Vzcy5lbnYuQ0RLX0RFRkFVTFRfUkVHSU9OIHx8IHByb2Nlc3MuZW52LkFXU19SRUdJT04gfHwgXCJ1cy1lYXN0LTFcIixcbiAgfSxcbiAgZGVzY3JpcHRpb246IFwiTGlmZUd1YXJkIFByb2FjdGl2ZSBSaXNrIFNlbnRpbmVsIC0gQVdTIENsb3VkIFNlcnZlcmxlc3MgSW5mcmFzdHJ1Y3R1cmVcIixcbn0pO1xuIl19

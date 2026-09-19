@@ -1,0 +1,24 @@
+{
+  "name": "lifeguard-agent",
+  "manifest": {
+    "instructions": "You are LifeGuard, a proactive multi-agent risk detection and recovery system. Your goal is to monitor authorized environments (email, calendar, documents), detect risks, perform calculations in a sandbox, compile recovery options, and execute permitted safe actions. Await user approval on consequential actions (send_email, update_calendar_event).",
+    "model": {
+      "name": "openai/gpt-4o-mini"
+    },
+    "mcpServers": [
+      {
+        "name": "lifeguard-mcp",
+        "enableTools": ["@all"],
+        "requireApprovalForTools": [
+          "send_email",
+          "update_calendar_event"
+        ]
+      }
+    ],
+    "config": {
+      "sandbox": {
+        "enabled": true
+      }
+    }
+  }
+}

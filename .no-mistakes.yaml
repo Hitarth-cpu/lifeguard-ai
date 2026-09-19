@@ -1,0 +1,22 @@
+# LifeGuard No-Mistakes Quality & Review Policy
+# Optimized for Windows & Cross-Platform Node.js Execution
+
+# Disable external project-level overrides for gate agents
+disable_project_settings: true
+
+# Documentation placement policy for LifeGuard
+document:
+  instructions: |
+    Review docs/architecture.md and docs/desktop-app.md before changing system logic or UI.
+    Ensure all personal risk detection scenarios (travel, financial, commitment deadlines),
+    TrueForge harness integrations, and human-in-the-loop pause points are documented accurately.
+
+# Canonical commands for linting, testing, and evidence checking
+commands:
+  lint: 'npm run build'
+  test: 'npm test'
+
+# Store test evidence in temporary directory
+test:
+  evidence:
+    store_in_repo: false

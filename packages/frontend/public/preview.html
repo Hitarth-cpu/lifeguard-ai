@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instinct.ai / LifeGuard - Interactive UI Preview Showcase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Theme 1: Midnight Obsidian (Default) */
+      --bg-dark: #0b0f19;
+      --bg-card: rgba(17, 24, 39, 0.7);
+      --bg-card-hover: rgba(30, 41, 59, 0.8);
+      --border-glass: rgba(255, 255, 255, 0.08);
+      --accent-primary: #6366f1;
+      --accent-secondary: #8b5cf6;
+      --accent-glow: rgba(99, 102, 241, 0.25);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-sub: #64748b;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --success: #10b981;
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    [data-theme="cyber-slate"] {
+      --bg-dark: #12141c;
+      --bg-card: rgba(26, 29, 41, 0.85);
+      --bg-card-hover: rgba(35, 39, 56, 0.95);
+      --border-glass: rgba(0, 242, 254, 0.15);
+      --accent-primary: #00f2fe;
+      --accent-secondary: #4facfe;
+      --accent-glow: rgba(0, 242, 254, 0.25);
+      --text-main: #ffffff;
+      --text-muted: #a0aec0;
+      --text-sub: #718096;
+      --danger: #ff4b4b;
+      --warning: #ffb703;
+      --success: #00e676;
+    }
+
+    [data-theme="minimal-mono"] {
+      --bg-dark: #18181b;
+      --bg-card: rgba(24, 24, 27, 0.9);
+      --bg-card-hover: rgba(39, 39, 42, 0.9);
+      --border-glass: rgba(255, 255, 255, 0.12);
+      --accent-primary: #f4f4f5;
+      --accent-secondary: #a1a1aa;
+      --accent-glow: rgba(255, 255, 255, 0.1);
+      --text-main: #fafafa;
+      --text-muted: #a1a1aa;
+      --text-sub: #71717a;
+      --danger: #f87171;
+      --warning: #fbbf24;
+      --success: #34d399;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Top Demo Switcher Bar */
+    .demo-bar {
+      background: rgba(15, 23, 42, 0.95);
+      border-bottom: 1px solid var(--border-glass);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+    }
+    .demo-title { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+    .demo-controls { display: flex; gap: 12px; align-items: center; }
+    .theme-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .theme-btn.active, .theme-btn:hover {
+      background: var(--accent-primary);
+      color: #000;
+      border-color: var(--accent-primary);
+    }
+
+    /* Header */
+    .app-header {
+      padding: 16px 32px;
+      border-bottom: 1px solid var(--border-glass);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-card);
+    }
+    .logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 20px; letter-spacing: -0.5px; }
+    .logo-icon {
+      width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    }
+    .status-badge {
+      display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px;
+      font-size: 12px; font-weight: 600; background: rgba(16, 185, 129, 0.1); color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success); }
+
+    /* Layout */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 24px;
+      padding: 24px 32px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    /* Left Pane: Chat & Triggers */
+    .pane {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 14px;
+      padding: 20px;
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .pane-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chat-box {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-glass);
+      border-radius: 10px;
+      padding: 16px;
+      height: 380px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .msg { padding: 12px 14px; border-radius: 10px; font-size: 13px; line-height: 1.5; max-width: 85%; }
+    .msg.user { background: var(--accent-primary); color: #000; font-weight: 500; align-self: flex-end; }
+    .msg.agent { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); color: var(--text-main); align-self: flex-start; }
+
+    .input-row { display: flex; gap: 8px; }
+    .input-row input {
+      flex: 1; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-glass);
+      border-radius: 8px; padding: 10px 14px; color: #fff; font-size: 13px; outline: none;
+    }
+    .btn-action {
+      background: var(--accent-primary); color: #000; border: none; font-weight: 700;
+      padding: 10px 18px; border-radius: 8px; cursor: pointer; transition: opacity 0.2s;
+    }
+    .btn-action:hover { opacity: 0.9; }
+
+    /* Category Buttons (No Emojis, Pure Crisp SVGs/Badges) */
+    .filter-bar {
+      display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .filter-chip {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-glass);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .filter-chip.active, .filter-chip:hover {
+      background: var(--accent-glow);
+      color: var(--text-main);
+      border-color: var(--accent-primary);
+    }
+    .filter-chip .count {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 10px;
+    }
+
+    /* Risk Cards */
+    .risk-list { display: flex; flex-direction: column; gap: 14px; }
+    .risk-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-glass);
+      border-left: 4px solid var(--warning);
+      border-radius: 10px;
+      padding: 16px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .risk-card:hover { transform: translateY(-2px); border-color: var(--border-glass); }
+    .risk-card.high { border-left-color: var(--danger); }
+    .risk-card.medium { border-left-color: var(--warning); }
+
+    .risk-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .risk-cat { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-sub); tracking: 0.5px; }
+    .risk-title { font-size: 14px; font-weight: 700; color: var(--text-main); margin-top: 2px; }
+
+    /* Action Proposal Card */
+    .proposal-card {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.05));
+      border: 1px solid var(--accent-primary);
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 14px;
+    }
+    .proposal-header { font-size: 13px; font-weight: 700; color: var(--accent-primary); display: flex; justify-content: space-between; margin-bottom: 10px; }
+    .proposal-body { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px; }
+    .proposal-actions { display: flex; gap: 10px; }
+    .btn-approve {
+      background: var(--success); color: #000; border: none; font-size: 12px; font-weight: 700;
+      padding: 8px 16px; border-radius: 6px; cursor: pointer; flex: 1; text-align: center;
+    }
+    .btn-reject {
+      background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); color: var(--text-muted);
+      font-size: 12px; font-weight: 600; padding: 8px 16px; border-radius: 6px; cursor: pointer; flex: 1; text-align: center;
+    }
+
+    /* SVG Icon Helpers */
+    .icon { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+</head>
+<body data-theme="midnight-obsidian">
+
+  <!-- Interactive Demo Header -->
+  <div class="demo-bar">
+    <div class="demo-title">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Instinct.ai / LifeGuard UI Theme & Design Switcher
+    </div>
+    <div class="demo-controls">
+      <span style="font-size: 12px; color: var(--text-muted);">Select Palette:</span>
+      <button class="theme-btn active" onclick="setTheme('midnight-obsidian', this)">1. Midnight Obsidian</button>
+      <button class="theme-btn" onclick="setTheme('cyber-slate', this)">2. Cyber Slate</button>
+      <button class="theme-btn" onclick="setTheme('minimal-mono', this)">3. Minimal Mono</button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg class="icon" viewBox="0 0 24 24" style="stroke: #fff; width: 18px; height: 18px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      Instinct.ai
+    </div>
+    <div class="status-badge">
+      <div class="status-dot"></div>
+      Active Sentinel Protection
+    </div>
+  </header>
+
+  <!-- Workspace Grid -->
+  <div class="workspace-grid">
+    <!-- Left Pane: Chat & Controls -->
+    <div class="pane">
+      <div class="pane-title">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Agent Assistant & Inspection
+      </div>
+
+      <div class="chat-box">
+        <div class="msg agent">Hello! I am monitoring your connected inbox and calendar for deadlines, flight updates, and schedule conflicts.</div>
+        <div class="msg user">What needs my attention today?</div>
+        <div class="msg agent">I found 1 high-priority meeting conflict and 1 passport expiration warning for your upcoming Tokyo trip. See the Sentinel Dashboard.</div>
+      </div>
+
+      <div class="input-row">
+        <input type="text" placeholder="Ask agent to inspect or summarize..." value="Schedule the meeting from Priya's email">
+        <button class="btn-action">Run</button>
+      </div>
+    </div>
+
+    <!-- Right Pane: Sentinel Telemetry & Category Filters -->
+    <div class="pane">
+      <div class="pane-title">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Sentinel Intelligence & Risk Detection
+      </div>
+
+      <!-- Category Filter Bar (No Emojis!) -->
+      <div class="filter-bar">
+        <div class="filter-chip active" onclick="filterCategory('all', this)">
+          All Categories <span class="count">3</span>
+        </div>
+        <div class="filter-chip" onclick="filterCategory('workload', this)">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Workload & Calendar <span class="count">1</span>
+        </div>
+        <div class="filter-chip" onclick="filterCategory('travel', this)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M178 192l-40 40m0 0l-40-40m40 40V12"/></svg>
+          Travel & Logistics <span class="count">1</span>
+        </div>
+        <div class="filter-chip" onclick="filterCategory('finance', this)">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Finance & Invoices <span class="count">1</span>
+        </div>
+      </div>
+
+      <!-- Risk List -->
+      <div class="risk-list" id="risk-list">
+        <!-- Workload Risk -->
+        <div class="risk-card high" data-category="workload">
+          <div class="risk-header">
+            <div>
+              <div class="risk-cat">Workload & Calendar</div>
+              <div class="risk-title">Overlapping Project Review with Client Meeting</div>
+            </div>
+            <span style="font-size: 11px; font-weight: 700; color: var(--danger); background: rgba(239, 68, 68, 0.1); padding: 4px 8px; border-radius: 4px;">HIGH SEVERITY</span>
+          </div>
+          <div style="font-size: 12px; color: var(--text-muted);">Priya sent an urgent request for a project review at 3:00 PM tomorrow, colliding with existing Product Sync.</div>
+          
+          <!-- Proposal Card -->
+          <div class="proposal-card">
+            <div class="proposal-header">
+              <span>PROPOSED ACTION: Reschedule Product Sync to 4:30 PM</span>
+              <span>Requires Approval</span>
+            </div>
+            <div class="proposal-body">
+              Agent will update Google Calendar event 'Product Sync' and invite members to 4:30 PM slot.
+            </div>
+            <div class="proposal-actions">
+              <button class="btn-approve" onclick="alert('Proposal Approved! Google Calendar event created.')">Approve Action</button>
+              <button class="btn-reject" onclick="alert('Proposal Rejected.')">Decline</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Travel Risk -->
+        <div class="risk-card medium" data-category="travel">
+          <div class="risk-header">
+            <div>
+              <div class="risk-cat">Travel & Logistics</div>
+              <div class="risk-title">Passport Expiration Warning for Tokyo Conference</div>
+            </div>
+            <span style="font-size: 11px; font-weight: 700; color: var(--warning); background: rgba(245, 158, 11, 0.1); padding: 4px 8px; border-radius: 4px;">MEDIUM SEVERITY</span>
+          </div>
+          <div style="font-size: 12px; color: var(--text-muted);">Passport expires in less than 6 months prior to trip date (Nov 12). Renewal recommended.</div>
+        </div>
+
+        <!-- Finance Risk -->
+        <div class="risk-card medium" data-category="finance">
+          <div class="risk-header">
+            <div>
+              <div class="risk-cat">Finance & Invoices</div>
+              <div class="risk-title">Unconfirmed Cloud Hosting Invoice Payment</div>
+            </div>
+            <span style="font-size: 11px; font-weight: 700; color: var(--warning); background: rgba(245, 158, 11, 0.1); padding: 4px 8px; border-radius: 4px;">MEDIUM SEVERITY</span>
+          </div>
+          <div style="font-size: 12px; color: var(--text-muted);">AWS hosting invoice received via Gmail due in 2 days.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function setTheme(theme, btn) {
+      document.body.setAttribute('data-theme', theme);
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function filterCategory(cat, btn) {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('#risk-list .risk-card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-category') === cat) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
