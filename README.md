@@ -83,8 +83,8 @@ Busy professionals, software engineers, recruiters, students, and executives who
 
 ### 1. Installation
 ```bash
-git clone <repository_url>
-cd lifeguard
+git clone https://github.com/Hitarth-cpu/lifeguard-ai.git
+cd lifeguard-ai
 npm install
 ```
 
@@ -141,9 +141,9 @@ Open `http://localhost:5173` in your browser.
 
 ---
 
-## 🎥 Demo Video & Deployment Links
+## 🎥 Repository & Demo References
 
-- **Repository**: [Pending First Commit Push]
-- **Live Frontend Deployment**: [Vercel Deployment Link]
-- **Backend API Server**: [AWS App Runner / Elastic Beanstalk Link]
-- **Demo Video**: [YouTube / Loom Demo Video]
+- **GitHub Repository**: [https://github.com/Hitarth-cpu/lifeguard-ai](https://github.com/Hitarth-cpu/lifeguard-ai)
+- **Execution Mode**: Monorepo Application (Vite Frontend `http://localhost:5173` | Express Backend `http://localhost:3002`)
+- **Demo Video & Screenshots**: Included in repository under [`Reference/Overaaaalll_UI.mp4`](Reference/Overaaaalll_UI.mp4) & [`Reference/Overall_working_recommadationss_progresss.webp`](Reference/Overall_working_recommadationss_progresss.webp)
+
